@@ -1,7 +1,8 @@
 #define GLEW_STATIC
+
 #include "Projectile.h"
 
-Projectile::Projectile() : x(0), y(0), velocityY(PROJECTILE_SPEED), active(false) {
+Projectile::Projectile(bool _fromEnemy) : x(0), y(0), velocityY(PROJECTILE_SPEED), active(false), fromEnemy(_fromEnemy) {
     initializeBuffers();
 }
 
@@ -44,13 +45,15 @@ void Projectile::initializeBuffers() {
     // Bind and fill color buffer
     glBindBuffer(GL_ARRAY_BUFFER, vboColors);
     glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), colors, GL_STATIC_DRAW);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void Projectile::updateVertices() {
-    vertices[0] = x - PROJECTILE_WIDTH/2; vertices[1] = y - PROJECTILE_HEIGHT/2;  // Bottom left
-    vertices[2] = x + PROJECTILE_WIDTH/2; vertices[3] = y - PROJECTILE_HEIGHT/2;  // Bottom right
-    vertices[4] = x + PROJECTILE_WIDTH/2; vertices[5] = y + PROJECTILE_HEIGHT/2;  // Top right
-    vertices[6] = x - PROJECTILE_WIDTH/2; vertices[7] = y + PROJECTILE_HEIGHT/2;  // Top left
+   vertices[0] = x - PROJECTILE_WIDTH/2; vertices[1] = y - PROJECTILE_HEIGHT/2;  
+   vertices[2] = x + PROJECTILE_WIDTH/2; vertices[3] = y - PROJECTILE_HEIGHT/2; 
+   vertices[4] = x + PROJECTILE_WIDTH/2; vertices[5] = y + PROJECTILE_HEIGHT/2;  
+   vertices[6] = x - PROJECTILE_WIDTH/2; vertices[7] = y + PROJECTILE_HEIGHT/2;  
 }
 
 void Projectile::spawn(float startX, float startY) {
@@ -62,18 +65,30 @@ void Projectile::spawn(float startX, float startY) {
     // Update VBO
     glBindBuffer(GL_ARRAY_BUFFER, vboVertices);
     glBufferSubData(GL_ARRAY_BUFFER, 0, 8 * sizeof(float), vertices);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void Projectile::update() {
     if (!active)
         return;
 
-    y += velocityY;
-
-    // Deactivate if out of bounds
-    if (y > SCREEN_TOP) {
-        active = false;
-        return;
+	if (!fromEnemy) {
+		y += velocityY;
+		
+		// Deactivate if out of bounds
+	    if (y > SCREEN_TOP) {
+	        active = false;
+	        return;
+	    }
+	} else {
+    	y -= velocityY;
+		
+		// Deactivate if out of bounds
+	    if (y < SCREEN_BOTTOM) {
+	        active = false;
+	        return;
+	    }
     }
 
     updateVertices();
@@ -81,6 +96,8 @@ void Projectile::update() {
     // Update VBO
     glBindBuffer(GL_ARRAY_BUFFER, vboVertices);
     glBufferSubData(GL_ARRAY_BUFFER, 0, 8 * sizeof(float), vertices);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void Projectile::render() {
@@ -96,8 +113,15 @@ void Projectile::render() {
     glColorPointer(3, GL_FLOAT, 0, 0);
 
     glDrawArrays(GL_QUADS, 0, 4);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glDisableVertexAttribArray(0);
 }
 
+void Projectile::deactivate() { active = false; }
+
+// Getters
+float Projectile::getX() const { return x; }
+float Projectile::getY() const { return y; }
 bool Projectile::isActive() const { return active; }

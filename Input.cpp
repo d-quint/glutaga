@@ -16,3 +16,7 @@ void specialKeyDown(int key, int x, int y) {
 void specialKeyUp(int key, int x, int y) {
     specialKeyStates[key] = false;
 }
+
+void mouseButton(int button, int state, int x, int y) {
+    mouseButtons[button] = (state == GLUT_DOWN);
+}

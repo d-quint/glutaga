@@ -1,4 +1,5 @@
 #define GLEW_STATIC
+
 #include "Player.h"
 
 Player::Player(float startX, float startY, float playerSize)
@@ -37,18 +38,20 @@ void Player::initializeBuffers() {
 
     // Initialize color data (white for now)
     for (int i = 0; i < 12; i += 3) {
-        colors[i] = 1.0f;     // R
+        colors[i] = 0.0f;     // R
         colors[i + 1] = 1.0f; // G
         colors[i + 2] = 0.0f; // B
     }
 
     // Bind and fill vertex buffer
     glBindBuffer(GL_ARRAY_BUFFER, vboVertices);
-    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), vertices, GL_DYNAMIC_DRAW);
 
     // Bind and fill color buffer
     glBindBuffer(GL_ARRAY_BUFFER, vboColors);
     glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), colors, GL_STATIC_DRAW);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void Player::checkBoundaryCollision() {
@@ -108,6 +111,8 @@ void Player::updatePosition() {
         
         glUnmapBuffer(GL_ARRAY_BUFFER);
     }
+    
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void Player::render() {
@@ -120,6 +125,8 @@ void Player::render() {
     glColorPointer(3, GL_FLOAT, 0, 0);
 
     glDrawArrays(GL_QUADS, 0, 4);
+    
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glDisableVertexAttribArray(0);
 }

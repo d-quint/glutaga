@@ -5,5 +5,6 @@ void keyboardDown(unsigned char key, int x, int y);
 void keyboardUp(unsigned char key, int x, int y);
 void specialKeyDown(int key, int x, int y);
 void specialKeyUp(int key, int x, int y);
+void mouseButton(int button, int state, int x, int y);
 
 #endif // INPUT_H
