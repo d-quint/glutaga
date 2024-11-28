@@ -20,22 +20,54 @@ void Projectile::initializeBuffers() {
 
     // Allocate arrays
     vertices = new float[8];  // 4 vertices * 2 coordinates
-    colors = new float[12];   // 4 vertices * 3 colors (RGB)
+    colors = new float[16];   // 4 vertices * 4 colors (RGBA)
 
     // Initialize vertex data for a rectangle
     updateVertices();
 
-    // Initialize color data (yellow projectile)
-    for (int i = 0; i < 6; i += 3) {
-        colors[i] = 0.0f;     // R
-        colors[i+1] = 0.0f;   // G
-        colors[i+2] = 0.0f;   // B
-    }
-    
-    for (int i = 6; i < 12; i += 3) {
-        colors[i] = 1.0f;     // R
-        colors[i+1] = 1.0f;   // G
-        colors[i+2] = 0.0f;   // B
+    // Initialize color data with gradients
+    if (fromEnemy) {
+        // Enemy projectile: White with green glow
+        colors[0] = 1.0f;   // White core
+        colors[1] = 1.0f;
+        colors[2] = 1.0f;
+        colors[3] = 1.0f;   // Full opacity
+
+        colors[4] = 1.0f;
+        colors[5] = 1.0f;
+        colors[6] = 1.0f;
+        colors[7] = 1.0f;
+
+        colors[8] = 0.2f;   // Green glow
+        colors[9] = 1.0f;
+        colors[10] = 0.2f;
+        colors[11] = 0.0f;  // Transparent edge
+
+        colors[12] = 0.2f;
+        colors[13] = 1.0f;
+        colors[14] = 0.2f;
+        colors[15] = 0.0f;
+    } else {
+        // Player projectile: White with blue glow
+        colors[0] = 1.0f;   // White core
+        colors[1] = 1.0f;
+        colors[2] = 1.0f;
+        colors[3] = 0.0f;   // Full opacity
+
+        colors[4] = 1.0f;
+        colors[5] = 1.0f;
+        colors[6] = 1.0f;
+        colors[7] = 0.0f;
+
+        colors[8] = 0.4f;   // Blue glow
+        colors[9] = 0.7f;
+        colors[10] = 1.0f;
+        colors[11] = 1.0f;  // Transparent edge
+
+        colors[12] = 0.4f;
+        colors[13] = 0.7f;
+        colors[14] = 1.0f;
+        colors[15] = 1.0f;
     }
 
     // Bind and fill vertex buffer
@@ -44,7 +76,7 @@ void Projectile::initializeBuffers() {
 
     // Bind and fill color buffer
     glBindBuffer(GL_ARRAY_BUFFER, vboColors);
-    glBufferData(GL_ARRAY_BUFFER, 12 * sizeof(float), colors, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(float), colors, GL_STATIC_DRAW);
     
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
@@ -104,19 +136,23 @@ void Projectile::render() {
     if (!active)
         return;
 
-    glEnableVertexAttribArray(0); // Position
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+    glEnableVertexAttribArray(0); 
 
     glBindBuffer(GL_ARRAY_BUFFER, vboVertices);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
     glBindBuffer(GL_ARRAY_BUFFER, vboColors);
-    glColorPointer(3, GL_FLOAT, 0, 0);
+    glColorPointer(4, GL_FLOAT, 0, 0);
 
     glDrawArrays(GL_QUADS, 0, 4);
-    
+
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
     glDisableVertexAttribArray(0);
+    glDisable(GL_BLEND);
 }
 
 void Projectile::deactivate() { active = false; }

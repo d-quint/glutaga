@@ -52,6 +52,7 @@ void processInput() {
 			    break;
 			}
 	    }
+	    player->startRotation();
 	    leftMouseWasPressed = true;
 	} else if (!mouseButtons[GLUT_LEFT_BUTTON]) {
 	    leftMouseWasPressed = false;
@@ -86,7 +87,7 @@ void updateSpawnEnemies() {
 	static float spawnTimer = 0.0f;
 	spawnTimer += 0.016f; // 60 fps
 	
-	if (spawnTimer > 4.0f) { 
+	if (spawnTimer > 2.0f) { 
 	    for (int i = 0; i < enemies.size(); i++) {
 	        if (!enemies[i]->isActive()) {
 	            enemies[i]->spawn();
@@ -134,7 +135,7 @@ void update(int value) {
 void initObjects() { 
     glEnableClientState(GL_COLOR_ARRAY);
 	
-	player = new Player();
+	player = new Player(0.0f, -0.5f, 0.1f);
 	
 	// Initialize projectile pools
     for (int i = 0; i < MAX_PROJECTILES; i++) {
