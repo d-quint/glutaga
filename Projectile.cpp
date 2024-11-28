@@ -49,23 +49,23 @@ void Projectile::initializeBuffers() {
         colors[15] = 0.0f;
     } else {
         // Player projectile: White with blue glow
-        colors[0] = 1.0f;   // White core
-        colors[1] = 1.0f;
-        colors[2] = 1.0f;
-        colors[3] = 0.0f;   // Full opacity
+        colors[0] = 1.0f;    // Orange glow
+        colors[1] = 0.7f; 
+        colors[2] = 0.0f;
+        colors[3] = 0.0f;   // Transparent edge
 
-        colors[4] = 1.0f;
-        colors[5] = 1.0f;
-        colors[6] = 1.0f;
+        colors[4] = 1.0f; 
+        colors[5] = 0.7f; 
+        colors[6] = 0.0f;
         colors[7] = 0.0f;
 
-        colors[8] = 0.4f;   // Blue glow
-        colors[9] = 0.7f;
+        colors[8] = 1.0f;   // White core
+        colors[9] = 1.0f;
         colors[10] = 1.0f;
-        colors[11] = 1.0f;  // Transparent edge
+        colors[11] = 1.0f;  // Full opacity
 
-        colors[12] = 0.4f;
-        colors[13] = 0.7f;
+        colors[12] = 1.0f;
+        colors[13] = 1.0f;
         colors[14] = 1.0f;
         colors[15] = 1.0f;
     }

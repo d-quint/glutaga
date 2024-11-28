@@ -1,44 +1,54 @@
 #define GLEW_STATIC
 
 #include "Player.h"
+#include "Projectile.h"
 
-GLfloat y_offset = -0.1f;
+GLfloat y_offset = -0.085f;
 GLfloat outline_offset = -0.2f;  // - value to make outline large
-GLfloat outline_thickness = 1.5f;
+GLfloat outline_thickness = 3.0f;
 
 GLfloat headVertices[] = {
     // Main shape vertices
-    0.0f, 0.85f + y_offset,
-    0.85f, 0.0f + y_offset,
-    0.0f, -0.85f + y_offset,
-    -0.85f, 0.0f + y_offset,
+    0.0f, 0.65f + y_offset,
+    0.65f, 0.0f + y_offset,
+    0.0f, -0.65f + y_offset,
+    -0.65f, 0.0f + y_offset,
     
     // Outline vertices (scaled inward by outline_offset)
-    0.0f, (0.85f - outline_offset) + y_offset,
-    (0.85f - outline_offset), 0.0f + y_offset,
-    0.0f, (-0.85f + outline_offset) + y_offset,
-    (-0.85f + outline_offset), 0.0f + y_offset
+    0.0f, (0.65f - outline_offset) + y_offset,
+    (0.65f - outline_offset), 0.0f + y_offset,
+    0.0f, (-0.65f + outline_offset) + y_offset,
+    (-0.65f + outline_offset), 0.0f + y_offset
 };
 
 GLfloat headColors[] = {
-	0.0f, 0.2f, 0.8f, 
-	0.1f, 0.2f, 0.8f, 
-	0.1f, 0.2f, 0.8f,
-	0.1f, 0.2f, 0.8f, 
-	
-	0.0f, 0.2f, 0.8f, 
-	0.8f, 0.8f, 0.8f, 
-	0.8f, 0.8f, 0.8f, 
-	0.8f, 0.8f, 0.8f, 
+    0.8f, 0.3f, 0.1f, 
+    0.8f, 0.3f, 0.1f, 
+    0.8f, 0.3f, 0.1f, 
+    0.8f, 0.3f, 0.1f, 
+    
+    0.9f, 0.8f, 0.5f, 
+    0.9f, 0.8f, 0.5f, 
+    0.9f, 0.8f, 0.5f, 
+    0.9f, 0.8f, 0.5f, 
 };
 
 Player::Player(float startX, float startY, float _playerSize)
     : x(startX), y(startY), playerSize(_playerSize), velocityX(0), velocityY(0),
       acceleration(0.001f), friction(0.98f), maxSpeed(0.02f),
       vertices(NULL), colors(NULL), vertexCount(0),
-      isRotating(false), rotationAngle(0.0f), rotationSpeed(5.0f),
+      isRotating(false), rotationAngle(0.0f), rotationSpeed(3.0f),
       particleSystem(60.0f) {  // 60 particles per second
     loadSpriteData("player.txt");
+
+    // Initialize head colors
+    currentHeadColor[0] = 0.8f; // Initial orange color
+    currentHeadColor[1] = 0.3f;
+    currentHeadColor[2] = 0.1f;
+
+    targetHeadColor[0] = 0.8f; // Target orange color
+    targetHeadColor[1] = 0.3f;
+    targetHeadColor[2] = 0.1f;
 }
 
 Player::~Player() {
@@ -182,6 +192,40 @@ void Player::render() {
     // Render smoke particles first
     particleSystem.render();
     
+    // Render the head fill
+    glPushMatrix();  
+    
+    glTranslatef(x, y+(y_offset), 0.0f);
+    glScalef(playerSize, playerSize, 1.0f);  // Scale head using the playerSize variable
+    
+    if (isRotating) {
+        glRotatef(rotationAngle, 0.0f, 0.0f, 1.0f);
+    }
+    
+    glTranslatef(-x, -(y+(y_offset)), 0.0f);
+
+    // Update head color buffer with current head color
+    glBindBuffer(GL_ARRAY_BUFFER, vboHeadColors);
+    GLfloat updatedHeadColors[12] = {
+        currentHeadColor[0], currentHeadColor[1], currentHeadColor[2],
+        currentHeadColor[0], currentHeadColor[1], currentHeadColor[2],
+        currentHeadColor[0], currentHeadColor[1], currentHeadColor[2],
+        currentHeadColor[0], currentHeadColor[1], currentHeadColor[2]
+    };
+    glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(updatedHeadColors), updatedHeadColors);
+
+    // Draw the head fill
+    glBindBuffer(GL_ARRAY_BUFFER, vboHeadVertices);
+    glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vboHeadColors);
+    glColorPointer(3, GL_FLOAT, 0, 0);
+
+    glDrawArrays(GL_QUADS, 0, 4);
+
+    glPopMatrix();
+    
+    // Render ship body
     glPushMatrix(); 
     
     glTranslatef(x, y, 0.0f);
@@ -197,12 +241,11 @@ void Player::render() {
     glDrawArrays(GL_QUADS, 0, vertexCount);
     
     glPopMatrix();
-
-    // Render the head with rotation and scaling
+    
+    // Render the head outline
     glPushMatrix();  
     
     glTranslatef(x, y+(y_offset), 0.0f);
-    
     glScalef(playerSize, playerSize, 1.0f);  // Scale head using the playerSize variable
     
     if (isRotating) {
@@ -210,17 +253,14 @@ void Player::render() {
     }
     
     glTranslatef(-x, -(y+(y_offset)), 0.0f);
-    
 
-    // Draw the head
+    // Draw the head outline
     glBindBuffer(GL_ARRAY_BUFFER, vboHeadVertices);
     glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 0, 0);
 
     glBindBuffer(GL_ARRAY_BUFFER, vboHeadColors);
     glColorPointer(3, GL_FLOAT, 0, 0);
 
-    glDrawArrays(GL_QUADS, 0, 4);
-    
     // Set thicker line width for outline
     glLineWidth(outline_thickness);  
     glDrawArrays(GL_LINE_LOOP, 4, 4);
@@ -281,10 +321,16 @@ void Player::update() {
     // Handle rotation logic
     if (isRotating) {
         rotationAngle += rotationSpeed;
-        if (rotationAngle >= 360.0f) {
+        if (rotationAngle >= 90.0f) {
             rotationAngle = 0.0f;  // Reset the angle
             isRotating = false;   // Stop the rotation
         }
+    }
+
+    // Interpolate head color back to orange
+    float interpolationFactor = rotationAngle / 720.0f; // Slow transition
+    for (int i = 0; i < 3; ++i) {
+        currentHeadColor[i] = currentHeadColor[i] * (1.0f - interpolationFactor) + targetHeadColor[i] * interpolationFactor;
     }
 
     // Update particle system
@@ -320,3 +366,24 @@ void Player::moveDown() {
 float Player::getX() const { return x; }
 float Player::getY() const { return y; }
 float Player::getSize() const { return playerSize; }
+
+void Player::shoot(std::vector<Projectile*>& projectiles) {
+    if (isRotating) {
+        std::cout << "Cannot shoot while rotating!" << std::endl;
+        return;  // Prevent shooting if the player is rotating
+    }
+
+    for (int i = 0; i < projectiles.size(); i++) {
+        if (!projectiles[i]->isActive()) {
+            projectiles[i]->spawn(x, y + playerSize);
+            startRotation();  // Start rotation after shooting
+
+            // Change head color to grey when shooting
+            currentHeadColor[0] = 0.5f;
+            currentHeadColor[1] = 0.5f;
+            currentHeadColor[2] = 0.5f;
+
+            break;
+        }
+    }
+}

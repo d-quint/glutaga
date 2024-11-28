@@ -3,6 +3,7 @@
 
 #include "Globals.h"
 #include "ParticleSystem.h"
+#include "Projectile.h"
 
 class Player {
   private:
@@ -28,6 +29,10 @@ class Player {
 
     ParticleSystem particleSystem;
 
+    // Current and target colors for the head
+    float currentHeadColor[3];
+    float targetHeadColor[3];
+
     void loadSpriteData(const char* filename); // Load sprite data from file
     void initializeBuffers();        // Initialize OpenGL buffer bjects
     void checkBoundaryCollision();   // Handle collisions with boundaries
@@ -49,6 +54,8 @@ class Player {
     float getX() const;              // Get the current X position
     float getY() const;              // Get the current Y position
     float getSize() const;           // Get the size of the player
+
+    void shoot(std::vector<Projectile*>& projectiles);
 };
 
 #endif // PLAYER_H

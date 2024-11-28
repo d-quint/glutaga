@@ -46,13 +46,7 @@ void processInput() {
         
 	// Handle shooting
 	if (mouseButtons[GLUT_LEFT_BUTTON] && !leftMouseWasPressed) {
-	    for (int i = 0; i < projectiles.size(); i++) {
-			if (!projectiles[i]->isActive()) {
-			    projectiles[i]->spawn(player->getX(), player->getY() + player->getSize());
-			    break;
-			}
-	    }
-	    player->startRotation();
+	    player->shoot(projectiles);
 	    leftMouseWasPressed = true;
 	} else if (!mouseButtons[GLUT_LEFT_BUTTON]) {
 	    leftMouseWasPressed = false;
@@ -135,7 +129,7 @@ void update(int value) {
 void initObjects() { 
     glEnableClientState(GL_COLOR_ARRAY);
 	
-	player = new Player(0.0f, -0.5f, 0.1f);
+	player = new Player(0.0f, -0.5f, 0.085f);
 	
 	// Initialize projectile pools
     for (int i = 0; i < MAX_PROJECTILES; i++) {
@@ -155,7 +149,7 @@ void initObjects() {
 int main(int argc, char** argv) {
     // Initialize OpenGL, GLEW, and GLUT
     glutInit(&argc, argv);
-    glutInitWindowSize(500, 500);
+    glutInitWindowSize(600, 600);
     glutCreateWindow("Game");
 
     glutDisplayFunc(display);
