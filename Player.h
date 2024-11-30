@@ -38,6 +38,11 @@ class Player {
     void checkBoundaryCollision();   // Handle collisions with boundaries
     void updatePosition();           // Update vertex positions based on player position
 
+    bool isDead;
+    bool isExploding;
+    float deathTimer;
+    static const float DEATH_ANIMATION_TIME = 5.0f;  // 5 seconds
+
   public:
     Player(float startX = 0.0f, float startY = 0.0f, float _playerSize = 0.1f);
     ~Player();
@@ -57,6 +62,9 @@ class Player {
 
     void shoot(std::vector<Projectile*>& projectiles);
     bool checkCollision(float projectileX, float projectileY, float projectileWidth, float projectileHeight);
+
+    void startDeathSequence();
+    bool isDying() const { return isExploding; }
 };
 
 #endif // PLAYER_H

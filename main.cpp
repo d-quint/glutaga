@@ -169,6 +169,11 @@ void update(int value) {
     background->update(0.016f);
     ui->update(0.016f);
 
+    // Check if player should die after health animation completes
+    if (ui->getHealth() <= 0 && ui->isHealthAnimationComplete()) {
+        player->startDeathSequence();
+    }
+
     glutPostRedisplay();
     glutTimerFunc(16, update, 0);
 }
@@ -193,7 +198,7 @@ void initObjects() {
 	    enemies.push_back(new Enemy());
 	}
     
-    ui = new UI(100.0f);  // Initialize with 100 HP
+    ui = new UI(player, 100.0f);  // Pass player pointer to UI
 }
 
 void reshapeWindow(int w, int h) {

@@ -1,6 +1,11 @@
 #include "UI.h"
 
 void UI::render() {
+    // Don't render UI if player is dying
+    if (player->isDying()) {
+        return;
+    }
+
     // Constants for bar positioning and size
     const float BAR_WIDTH = 0.01f;        
     const float BAR_HEIGHT = 0.15f;    
@@ -63,6 +68,16 @@ void UI::render() {
     }
     glEnd();
     
+    glColor4f(0.9f, 0.9f, 0.9f, 1.0f); 
+    glBegin(GL_POLYGON);
+    for (int i = 0; i <= SEGMENTS; i++) {
+        float angle = 2.0f * M_PI * i / SEGMENTS;
+        float posX = x + BAR_OFFSET_X + CORNER_RADIUS * cos(angle);
+        float posY = y - BAR_HEIGHT/2 + CORNER_RADIUS * sin(angle);
+        glVertex2f(posX, posY);
+    }
+    glEnd();
+
     glDisable(GL_BLEND);
 }
 
@@ -80,8 +95,15 @@ void UI::setHealth(float health) {
     playerHealth = std::max(0.0f, std::min(health, maxPlayerHealth));
 }
 
+bool UI::isHealthAnimationComplete() const {
+    return abs(playerHealth - displayedHealth) < 0.1f;
+}
+
 void UI::damage(float amount) {
     setHealth(playerHealth - amount);
+    if (playerHealth <= 0 && isHealthAnimationComplete()) {
+        player->startDeathSequence();
+    }
 }
 
 void UI::heal(float amount) {

@@ -38,7 +38,10 @@ Player::Player(float startX, float startY, float _playerSize)
       acceleration(0.001f), friction(0.98f), maxSpeed(0.02f),
       vertices(NULL), colors(NULL), vertexCount(0),
       isRotating(false), rotationAngle(0.0f), rotationSpeed(3.0f),
-      particleSystem(60.0f) {  // 60 particles per second
+      particleSystem(60.0f),
+      isDead(false),
+      isExploding(false),
+      deathTimer(0.0f) {  // 60 particles per second
     loadSpriteData("player.txt");
 
     // Initialize head colors
@@ -187,6 +190,11 @@ void Player::updatePosition() {
 }
 
 void Player::render() {
+    if (isExploding) {
+        particleSystem.render();
+        return;
+    }
+
     glEnableVertexAttribArray(0); 
     
     // Render smoke particles first
@@ -297,6 +305,17 @@ void Player::checkBoundaryCollision() {
 }
 
 void Player::update() {
+    if (isExploding) {
+        deathTimer -= 0.016f;  // Assuming 60 FPS
+        particleSystem.update(0.016f);
+        
+        if (deathTimer <= 0) {
+            isDead = true;
+            exit(0);  // Exit the game
+        }
+        return;
+    }
+
     // Apply friction
     velocityX *= friction;
     velocityY *= friction;
@@ -405,4 +424,12 @@ bool Player::checkCollision(float projectileX, float projectileY, float projecti
     bool collisionY = playerTop > projectileBottom && playerBottom < projectileTop;
 
     return collisionX && collisionY;
+}
+
+void Player::startDeathSequence() {
+    if (!isExploding) {
+        isExploding = true;
+        deathTimer = DEATH_ANIMATION_TIME;
+        particleSystem.emitExplosion(x, y);
+    }
 }
