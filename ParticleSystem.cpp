@@ -1,7 +1,4 @@
 #include "ParticleSystem.h"
-#include <cstdlib>
-#include <ctime>
-#include <iostream>
 
 ParticleSystem::ParticleSystem(float _emissionRate)
     : emissionRate(_emissionRate), timeSinceLastEmission(0) {

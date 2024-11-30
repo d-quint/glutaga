@@ -261,7 +261,6 @@ void Player::render() {
     glBindBuffer(GL_ARRAY_BUFFER, vboHeadColors);
     glColorPointer(3, GL_FLOAT, 0, 0);
 
-    // Set thicker line width for outline
     glLineWidth(outline_thickness);  
     glDrawArrays(GL_LINE_LOOP, 4, 4);
 

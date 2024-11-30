@@ -14,7 +14,6 @@ Projectile::~Projectile() {
 }
 
 void Projectile::initializeBuffers() {
-    // Generate vertex buffer objects
     glGenBuffers(1, &vboVertices);
     glGenBuffers(1, &vboColors);
 
@@ -22,7 +21,6 @@ void Projectile::initializeBuffers() {
     vertices = new float[8];  // 4 vertices * 2 coordinates
     colors = new float[16];   // 4 vertices * 4 colors (RGBA)
 
-    // Initialize vertex data for a rectangle
     updateVertices();
 
     // Initialize color data with gradients
@@ -70,11 +68,9 @@ void Projectile::initializeBuffers() {
         colors[15] = 1.0f;
     }
 
-    // Bind and fill vertex buffer
     glBindBuffer(GL_ARRAY_BUFFER, vboVertices);
     glBufferData(GL_ARRAY_BUFFER, 8 * sizeof(float), vertices, GL_DYNAMIC_DRAW);
 
-    // Bind and fill color buffer
     glBindBuffer(GL_ARRAY_BUFFER, vboColors);
     glBufferData(GL_ARRAY_BUFFER, 16 * sizeof(float), colors, GL_STATIC_DRAW);
     

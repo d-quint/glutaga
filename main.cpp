@@ -5,14 +5,19 @@
 #include "Projectile.h"
 #include "Enemy.h"
 #include "Input.h"
+#include "Background.h"
 
 Player* player;
+Background* background;
 std::vector<Projectile*> projectiles;
 std::vector<Projectile*> enemyProjectiles;
 std::vector<Enemy*> enemies;
 
 void display() { 
     glClear(GL_COLOR_BUFFER_BIT);
+    
+    // Render the background
+    background->render();
     
     // Render all active projectiles
 	for (int i = 0; i < projectiles.size(); i++) {
@@ -115,13 +120,15 @@ void updateEnemies() {
 void update(int value) {
     processInput();
 	
-	player->update();
-	
-	updateProjectiles();
-	updateSpawnEnemies();
-	updateShootEnemies();
-	updateEnemies();
-	
+    player->update();
+
+    updateProjectiles();
+    updateSpawnEnemies();
+    updateShootEnemies();
+    updateEnemies();
+
+    background->update(0.016f);
+
     glutPostRedisplay();
     glutTimerFunc(16, update, 0);
 }
@@ -130,6 +137,7 @@ void initObjects() {
     glEnableClientState(GL_COLOR_ARRAY);
 	
 	player = new Player(0.0f, -0.5f, 0.085f);
+    background = new Background();
 	
 	// Initialize projectile pools
     for (int i = 0; i < MAX_PROJECTILES; i++) {
@@ -148,9 +156,10 @@ void initObjects() {
 
 int main(int argc, char** argv) {
     // Initialize OpenGL, GLEW, and GLUT
-    glutInit(&argc, argv);
-    glutInitWindowSize(600, 600);
-    glutCreateWindow("Game");
+    glutInit(&argc, argv); 
+    glutInitWindowSize(600, 600); 
+    glutCreateWindow("GLUTAGA");
+    //glutFullScreen();
 
     glutDisplayFunc(display);
     glutKeyboardFunc(keyboardDown);

@@ -1,8 +1,8 @@
 #ifndef PARTICLE_SYSTEM_H
 #define PARTICLE_SYSTEM_H
 
-#include <vector>
 #include "Particle.h"
+#include "Globals.h"
 
 class ParticleSystem {
 private:

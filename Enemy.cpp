@@ -76,15 +76,12 @@ void Enemy::initializeBuffers() {
     std::cout << "Enemy sprite data loaded successfully!" << std::endl;
     std::cout << "Number of vertices: " << vertexCount << std::endl;
 
-    // Generate vertex buffer objects
     glGenBuffers(1, &vboVertices);
     glGenBuffers(1, &vboColors);
 
-    // Bind and fill vertex buffer
     glBindBuffer(GL_ARRAY_BUFFER, vboVertices);
     glBufferData(GL_ARRAY_BUFFER, vertexCount * 2 * sizeof(float), vertices, GL_DYNAMIC_DRAW);
 
-    // Bind and fill color buffer
     glBindBuffer(GL_ARRAY_BUFFER, vboColors);
     glBufferData(GL_ARRAY_BUFFER, vertexCount * 3 * sizeof(float), colors, GL_STATIC_DRAW);
 
@@ -178,6 +175,8 @@ void Enemy::render() {
         glDrawArrays(GL_QUADS, 0, vertexCount);
 
         glDisableVertexAttribArray(0);
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
 }
 
@@ -204,15 +203,13 @@ bool Enemy::checkCollision(float projectileX, float projectileY, float projectil
     return false;
 }
 
-// Add a new method to set the size 
 void Enemy::setSize(float newSize) {
     size = newSize;
-    updateVertices(); // Update vertex positions when size changes
+    updateVertices();
 }
 
 void Enemy::startDeathAnimation() {
     if (!isDying) {
-        std::cout << "Enemy destroyed! Starting death animation..." << std::endl;
         isDying = true;
         deathTimer = DEATH_ANIMATION_TIME;
         deathParticles.emitExplosion(x, y);

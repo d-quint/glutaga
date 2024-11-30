@@ -61,11 +61,11 @@ bool Particle::update(float deltaTime) {
     // Add random horizontal drift (smoke wavering)
     vx += (((rand() % 100) / 100.0f) - 0.5f) * RANDOM_DRIFT;
     
-    // Update position
+    // Updating position
     x += vx * deltaTime;
     y += vy * deltaTime;
     
-    // Update life and alpha
+    // Updating life and alpha
     life -= deltaTime;
     a = (life / maxLife) * 0.7f;  // Fade out gradually
     

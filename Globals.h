@@ -11,6 +11,8 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
 
 // Screen boundaries
 const float SCREEN_LEFT = -1.0f;
