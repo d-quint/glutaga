@@ -2,12 +2,12 @@
 #define PLAYER_H
 
 #include "Globals.h"
-#include "ParticleSystem.h"
 #include "Projectile.h"
+#include "ParticleSystem.h"
 
 class Player {
-  private:
-    float x, y;                      // Player position
+private:
+float x, y;                      // Player position
     float velocityX, velocityY;      // Velocity in X and Y directions
     float acceleration;              // Acceleration of the player
     float friction;                  // Friction applied to the player's movement
@@ -26,24 +26,26 @@ class Player {
     bool isRotating;                 // State to indicate if the head is rotating
     float rotationAngle;             // Current rotation angle (in degrees)
     float rotationSpeed;             // Speed of rotation (degrees per frame)
-
+    
     ParticleSystem particleSystem;
 
     // Current and target colors for the head
     float currentHeadColor[3];
     float targetHeadColor[3];
 
-    void loadSpriteData(const char* filename); // Load sprite data from file
-    void initializeBuffers();        // Initialize OpenGL buffer bjects
-    void checkBoundaryCollision();   // Handle collisions with boundaries
-    void updatePosition();           // Update vertex positions based on player position
+    void loadSpriteData(const char* filename);
+    void initializeBuffers();
+    void checkBoundaryCollision();
+    void updatePosition();
 
     bool isDead;
     bool isExploding;
     float deathTimer;
-    static const float DEATH_ANIMATION_TIME = 5.0f;  // 5 seconds
+    static const float DEATH_ANIMATION_TIME = 5.0f;
 
-  public:
+    void (*deathCallback)();
+
+public:
     Player(float startX = 0.0f, float startY = 0.0f, float _playerSize = 0.1f);
     ~Player();
 
@@ -62,11 +64,14 @@ class Player {
 
     void shoot(std::vector<Projectile*>& projectiles);
     bool checkCollision(float projectileX, float projectileY, float projectileWidth, float projectileHeight);
-
+    
     void startDeathSequence();
-    bool isDying() const { return isExploding; }
-
     void takeDamage();
+    bool isDying() const { return isExploding; }
+    
+    void setDeathCallback(void (*callback)()) {
+        deathCallback = callback;
+    }
 };
 
 #endif // PLAYER_H

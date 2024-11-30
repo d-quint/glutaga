@@ -15,6 +15,13 @@ std::vector<Projectile*> enemyProjectiles;
 std::vector<Enemy*> enemies;
 UI* ui;
 
+// Callback function for player death
+void onPlayerDeath() {
+    if (ui) {
+        ui->saveHighScore();
+    }
+}
+
 void display() { 
     glClear(GL_COLOR_BUFFER_BIT);
     
@@ -99,6 +106,7 @@ void updateProjectiles() {
                     projectiles[j]->getY(), 
                     PROJECTILE_WIDTH, 
                     PROJECTILE_HEIGHT)) {
+                ui->addScore(10);
                 projectiles[j]->deactivate(); // Deactivate projectile on hit
             }
         }
@@ -175,11 +183,11 @@ void update(int value) {
 
 void initObjects() { 
     glEnableClientState(GL_COLOR_ARRAY);
-	
-	player = new Player(0.0f, -0.5f, 0.085f);
+    
+    player = new Player(0.0f, -0.5f, 0.085f);
     background = new Background();
-	
-	// Initialize projectile pools
+    
+    // Initialize projectile pools
     for (int i = 0; i < MAX_PROJECTILES; i++) {
         projectiles.push_back(new Projectile(false));
     }
@@ -190,10 +198,13 @@ void initObjects() {
     
     // Initialize pool of enemies
     for (int i = 0; i < MAX_ENEMIES; i++) { 
-	    enemies.push_back(new Enemy());
-	}
+        enemies.push_back(new Enemy());
+    }
     
-    ui = new UI(player, 100.0f);  // Pass player pointer to UI
+    ui = new UI(player);
+    
+    // Set up death callback using function pointer
+    player->setDeathCallback(onPlayerDeath);
 }
 
 void reshapeWindow(int w, int h) {
@@ -220,7 +231,9 @@ void reshapeWindow(int w, int h) {
 }
 
 void cleanup() {
-    // Clean up allocated objects
+    // Save high score before cleaning up
+    ui->saveHighScore();
+    
     delete player;
     delete background;
     
@@ -230,6 +243,7 @@ void cleanup() {
     }
     projectiles.clear();
     
+    // Clean up enemy projectiles
     for (int i = 0; i < enemyProjectiles.size(); i++) {
         delete enemyProjectiles[i];
     }

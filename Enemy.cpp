@@ -72,10 +72,7 @@ void Enemy::initializeBuffers() {
         std::cerr << "Error: Sprite data is not loaded properly!" << std::endl;
         return;
     }
-    
-    std::cout << "Enemy sprite data loaded successfully!" << std::endl;
-    std::cout << "Number of vertices: " << vertexCount << std::endl;
-
+  
     glGenBuffers(1, &vboVertices);
     glGenBuffers(1, &vboColors);
 

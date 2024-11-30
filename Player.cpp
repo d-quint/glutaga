@@ -41,7 +41,8 @@ Player::Player(float startX, float startY, float _playerSize)
       particleSystem(60.0f),
       isDead(false),
       isExploding(false),
-      deathTimer(0.0f) {  // 60 particles per second
+      deathTimer(0.0f),
+      deathCallback(NULL) {  // 60 particles per second
     loadSpriteData("player.txt");
 
     // Initialize head colors
@@ -129,10 +130,6 @@ void Player::initializeBuffers() {
         }
         return;
     }
-    
-    std::cout << "Sprite data loaded successfully!" << std::endl;
-    std::cout << "Number of vertices: " << vertexCount << std::endl;
-    std::cout << "Number of colors: " << vertexCount << std::endl; // Assuming colors match vertices
 
     // Generate vertex buffer objects
     glGenBuffers(1, &vboVertices);
@@ -399,7 +396,6 @@ float Player::getSize() const { return playerSize; }
 
 void Player::shoot(std::vector<Projectile*>& projectiles) {
     if (isRotating) {
-        std::cout << "Cannot shoot while rotating!" << std::endl;
         return;  // Prevent shooting if the player is rotating
     }
 
@@ -443,6 +439,9 @@ void Player::startDeathSequence() {
         isExploding = true;
         deathTimer = DEATH_ANIMATION_TIME;
         particleSystem.emitExplosion(x, y);
+        if (deathCallback) {
+            deathCallback();
+        }
     }
 }
 

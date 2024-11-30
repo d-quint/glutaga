@@ -1,7 +1,33 @@
 #include "UI.h"
 
+const char* HIGH_SCORE_FILE = "highscore.dat";
+
 void UI::render() {
-    // Don't render UI if player is dying
+	// Calculate score position with sine wave motion
+    float scoreY = SCREEN_TOP - 0.1f + 
+                  SCORE_BOB_AMOUNT * sin(scoreAnimTime * SCORE_BOB_SPEED);
+    
+    // Render score text
+    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    
+    // Current score
+    glRasterPos2f(SCREEN_LEFT_GAMEPLAY + 0.1f, scoreY);
+    
+    char scoreText[32];
+    sprintf(scoreText, "YOUR SCORE: %d", currentScore);
+    for (const char* c = scoreText; *c != '\0'; c++) {
+        glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *c);
+    }
+    
+    // High score (positioned below current score)
+    glRasterPos2f(SCREEN_LEFT_GAMEPLAY + 0.1f, scoreY - 0.05f);
+    char highScoreText[32];
+    sprintf(highScoreText, "HIGH SCORE: %d", highScore);
+    for (const char* c = highScoreText; *c != '\0'; c++) {
+        glutBitmapCharacter(GLUT_BITMAP_9_BY_15, *c);
+    }
+	
+    // Don't render hp bar UI if player is dying
     if (player->isDying()) {
         return;
     }
@@ -89,6 +115,9 @@ void UI::update(float deltaTime) {
     } else {
         displayedHealth = playerHealth;
     }
+
+    // Update score animation time
+    scoreAnimTime += deltaTime;
 }
 
 void UI::setHealth(float health) {
@@ -111,3 +140,29 @@ void UI::setPosition(float newX, float newY) {
     x = newX;
     y = newY;
 } 
+
+void UI::addScore(int amount) {
+    currentScore += amount;
+    if (currentScore > highScore) {
+        highScore = currentScore;
+        saveHighScore();
+    }
+}
+
+void UI::loadHighScore() {
+    std::ifstream file(HIGH_SCORE_FILE, std::ios::binary);
+    if (file.is_open()) {
+        file.read(reinterpret_cast<char*>(&highScore), sizeof(highScore));
+        file.close();
+    } else {
+        highScore = 0;
+    }
+}
+
+void UI::saveHighScore() {
+    std::ofstream file(HIGH_SCORE_FILE, std::ios::binary);
+    if (file.is_open()) {
+        file.write(reinterpret_cast<const char*>(&highScore), sizeof(highScore));
+        file.close();
+    }
+}

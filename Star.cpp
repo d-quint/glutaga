@@ -11,8 +11,6 @@ Star::Star() {
     baseAlpha = 0.3f + (static_cast<float>(rand()) / RAND_MAX * 0.2f);
     currentAlpha = baseAlpha;
     size = 15.0f * baseAlpha * baseAlpha;
-
-    std::cout << "Created star with base alpha: " << baseAlpha << std::endl;
     
     // Speed directly proportional to base opacity
     speedY = -0.2f - (baseAlpha * 2.0f);  // Range from -0.6 to -1.8

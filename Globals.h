@@ -5,14 +5,16 @@
 #include <GL/glut.h>
 #include <GL/freeglut_ext.h>
 
-#include <stdio.h>
-#include <vector>
 #include <cmath>
-#include <fstream>
-#include <sstream>
-#include <iostream>
 #include <cstdlib>
 #include <ctime>
+#include <fstream>
+#include <functional>
+#include <iostream>
+#include <sstream>
+#include <stdio.h>
+#include <string>
+#include <vector>
 
 // Screen boundaries
 const float SCREEN_LEFT = -1.0f;
