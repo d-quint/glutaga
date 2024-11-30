@@ -43,6 +43,11 @@ class Player {
     float deathTimer;
     static const float DEATH_ANIMATION_TIME = 5.0f;  // 5 seconds
 
+    float damageShakeTimer;
+    float damageShakeAmount;
+    static const float DAMAGE_SHAKE_DURATION = 1.0f;  
+    static const float DAMAGE_SHAKE_INTENSITY = 0.1f;
+
   public:
     Player(float startX = 0.0f, float startY = 0.0f, float _playerSize = 0.1f);
     ~Player();
@@ -65,6 +70,8 @@ class Player {
 
     void startDeathSequence();
     bool isDying() const { return isExploding; }
+
+    void takeDamage();
 };
 
 #endif // PLAYER_H

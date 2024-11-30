@@ -15,6 +15,7 @@ public:
     void update(float deltaTime);
     void render();
     void emit(float x, float y);  // Regular emission
+    void emit(float x, float y, float vx, float vy, float life, float size, bool isDamage = false);
     void emitExplosion(float x, float y);  // Explosion effect
 };
 

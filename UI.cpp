@@ -97,8 +97,9 @@ void UI::setHealth(float health) {
 
 void UI::damage(float amount) {
     setHealth(playerHealth - amount);
+    player->takeDamage();
     if (playerHealth <= 0) {
-        player->startDeathSequence();  // Need to add Player pointer to UI
+        player->startDeathSequence();
     }
 }
 

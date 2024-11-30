@@ -1,31 +1,31 @@
 #include "Particle.h"
 #include <cstdlib>
 
-Particle::Particle(float _x, float _y, float _vx, float _vy, float _life, float _size, bool isExplosion)
+Particle::Particle(float _x, float _y, float _vx, float _vy, float _life, float _size, bool isDamage)
     : x(_x), y(_y), vx(_vx), vy(_vy), life(_life), maxLife(_life), size(_size) {
     
-    if (isExplosion) {
-        // Green, white and orange colors for explosion
+    if (isDamage) {
+        // Red and orange colors for damage particles
         switch(rand() % 3) {
-            case 0: // Green
+            case 0: // Bright green
                 r = 0.2f;
-                g = 1.0f;
+                g = 0.6f;
                 b = 0.2f;
                 break;
-            case 1: // White
-                r = 1.0f;
-                g = 1.0f;
-                b = 1.0f;
-                break;
-            case 2: // Orange
+            case 1: // Orange
                 r = 1.0f;
                 g = 0.6f;
                 b = 0.0f;
                 break;
+            case 2: // Yellow
+                r = 1.0f;
+                g = 0.9f;
+                b = 0.0f;
+                break;
         }
-        a = 0.4f;  // Start more transparent
+        a = 0.8f;  
     } else {
-        // Original fire/smoke colors for regular particles
+        // Original particle colors (rest of the existing color logic)
         switch(rand() % 4) {
             case 0: // Grey (smoke)
                 r = 0.7f;
@@ -48,10 +48,8 @@ Particle::Particle(float _x, float _y, float _vx, float _vy, float _life, float 
                 b = 1.0f;
                 break;
         }
+        a = 0.8f;
     }
-    
-    // Start with high opacity
-    a = 0.8f;
 }
 
 bool Particle::update(float deltaTime) {

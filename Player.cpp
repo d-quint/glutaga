@@ -324,6 +324,18 @@ void Player::update() {
     x += velocityX;
     y += velocityY;
 
+    // Update vertex positions
+    glBindBuffer(GL_ARRAY_BUFFER, vboVertices);
+    GLfloat* ptr = (GLfloat*)glMapBuffer(GL_ARRAY_BUFFER, GL_WRITE_ONLY);
+    
+    if (ptr) {
+        for (size_t i = 0; i < vertexCount; i++) {
+            ptr[i * 2] = vertices[i * 2] * playerSize + x;
+            ptr[i * 2 + 1] = vertices[i * 2 + 1] * playerSize + y;
+        }
+        glUnmapBuffer(GL_ARRAY_BUFFER);
+    }
+
     // Check for wall collisions
     checkBoundaryCollision();
 
@@ -431,5 +443,23 @@ void Player::startDeathSequence() {
         isExploding = true;
         deathTimer = DEATH_ANIMATION_TIME;
         particleSystem.emitExplosion(x, y);
+    }
+}
+
+void Player::takeDamage() {
+    if (!isExploding) {
+        // Emit damage particles
+        for (int i = 0; i < 30; i++) {
+            float angle = (rand() % 360) * 3.14159f / 180.0f;
+            float speed = 0.3f + (rand() % 100) / 200.0f;
+            
+            float vx = speed * cos(angle);
+            float vy = speed * sin(angle);
+            
+            float life = 2.0f + (rand() % 100) / 100.0f;
+            float size = 3.0f + (rand() % 20) / 10.0f;
+            
+            particleSystem.emit(x + vx*0.1f, y + vy*0.1f, vx, vy, life, size, true);
+        }
     }
 }

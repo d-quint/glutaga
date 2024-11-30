@@ -48,6 +48,10 @@ void ParticleSystem::emit(float x, float y) {
     }
 }
 
+void ParticleSystem::emit(float x, float y, float vx, float vy, float life, float size, bool isDamage) {
+    particles.push_back(Particle(x, y, vx, vy, life, size, isDamage));
+}
+
 void ParticleSystem::emitExplosion(float x, float y) {
     std::cout << "Emitting explosion particles..." << std::endl;
     
