@@ -169,11 +169,6 @@ void update(int value) {
     background->update(0.016f);
     ui->update(0.016f);
 
-    // Check if player should die after health animation completes
-    if (ui->getHealth() <= 0 && ui->isHealthAnimationComplete()) {
-        player->startDeathSequence();
-    }
-
     glutPostRedisplay();
     glutTimerFunc(16, update, 0);
 }

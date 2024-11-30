@@ -9,7 +9,7 @@ void UI::render() {
     // Constants for bar positioning and size
     const float BAR_WIDTH = 0.01f;        
     const float BAR_HEIGHT = 0.15f;    
-	const float CORNER_RADIUS = 0.025f;    
+	  const float CORNER_RADIUS = 0.025f;    
     const int SEGMENTS = 12;        
     
     // Offsets from player position
@@ -95,14 +95,10 @@ void UI::setHealth(float health) {
     playerHealth = std::max(0.0f, std::min(health, maxPlayerHealth));
 }
 
-bool UI::isHealthAnimationComplete() const {
-    return abs(playerHealth - displayedHealth) < 0.1f;
-}
-
 void UI::damage(float amount) {
     setHealth(playerHealth - amount);
-    if (playerHealth <= 0 && isHealthAnimationComplete()) {
-        player->startDeathSequence();
+    if (playerHealth <= 0) {
+        player->startDeathSequence();  // Need to add Player pointer to UI
     }
 }
 

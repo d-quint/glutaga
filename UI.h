@@ -30,7 +30,6 @@ public:
     float getHealth() const { return playerHealth; }
     void damage(float amount);
     void heal(float amount);
-    bool isHealthAnimationComplete() const;
 };
 
 #endif // UI_H 
