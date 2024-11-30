@@ -58,6 +58,24 @@ void processInput() {
 	}
 }
 
+void mouseWheel(int wheel, int direction, int x, int y)
+{
+    // Loop through all enemies and adjust their size
+    for (int i = 0; i < enemies.size(); i++)
+    {
+        float currentSize = enemies[i]->getSize();
+
+        // Increase/decrease size based on scroll direction
+        // direction will be +1 for scroll up, -1 for scroll down
+        float newSize = currentSize + (direction * 0.01f);
+
+        // Clamp size between reasonable limits
+        newSize = std::max(0.05f, std::min(0.2f, newSize));
+
+        enemies[i]->setSize(newSize);
+    }
+}
+
 void updateProjectiles() {
     // Update all active projectiles
     for (int i = 0; i < projectiles.size(); i++) {
@@ -222,6 +240,7 @@ int main(int argc, char** argv) {
     glutSpecialFunc(specialKeyDown);
     glutSpecialUpFunc(specialKeyUp);
     glutMouseFunc(mouseButton);
+    glutMouseWheelFunc(mouseWheel);
     glutTimerFunc(0, update, 0);
 
     glewInit();

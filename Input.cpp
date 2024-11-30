@@ -6,7 +6,7 @@ void keyboardDown(unsigned char key, int x, int y) {
     
     // Check for ESC key (ASCII value 27)
     if (key == 27) {
-        glutLeaveMainLoop();  // This will cleanly exit the program
+        glutLeaveMainLoop();  
     }
 }
 

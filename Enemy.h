@@ -45,6 +45,7 @@ class Enemy {
 
     // New method to set size
     void setSize(float newSize);
+    float getSize() const { return size; }
 
     void startDeathAnimation();
 };
