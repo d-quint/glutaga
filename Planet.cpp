@@ -23,15 +23,14 @@ Planet::Planet() {
     y = static_cast<float>(rand()) / RAND_MAX * 2.0f - 1.0f;
     
     size = 0.25f + (static_cast<float>(rand()) / RAND_MAX * 0.25f);
-    speedY = -0.1f - (static_cast<float>(rand()) / RAND_MAX * 0.1f);
+    speedY = -0.05f - (static_cast<float>(rand()) / RAND_MAX * 0.25f);
     rotation = 0.0f;
     rotationSpeed = -2.0f + (static_cast<float>(rand()) / RAND_MAX * 4.0f);
     
-    // Random pastel color
-    hue[0] = 0.5f + (static_cast<float>(rand()) / RAND_MAX * 0.5f);
-    hue[1] = 0.5f + (static_cast<float>(rand()) / RAND_MAX * 0.5f);
-    hue[2] = 0.5f + (static_cast<float>(rand()) / RAND_MAX * 0.5f);
-    hue[3] = 0.2f + (static_cast<float>(rand()) / RAND_MAX * 0.2f);
+    // Random dark color
+    hue[0] = 0.2f + static_cast<float>(rand()) / RAND_MAX * 0.2f;
+    hue[1] = 0.2f + static_cast<float>(rand()) / RAND_MAX * 0.1f;
+    hue[2] = 0.2f + static_cast<float>(rand()) / RAND_MAX * 0.2f;
 }
 
 Planet::~Planet() {
@@ -41,10 +40,18 @@ void Planet::update(float deltaTime) {
     y += speedY * deltaTime;
     rotation += rotationSpeed * deltaTime;
     
-    if (y < -1.2f) {
-        y = 1.5f + (static_cast<float>(rand()) / RAND_MAX * 0.5f);
+    if (y < -1.5f) {
         x = static_cast<float>(rand()) / RAND_MAX * 
             (SCREEN_RIGHT_GAMEPLAY - SCREEN_LEFT_GAMEPLAY) + SCREEN_LEFT_GAMEPLAY;
+        y = 1.5f + (static_cast<float>(rand()) / RAND_MAX * 0.5f);
+        
+        size = 0.25f + (static_cast<float>(rand()) / RAND_MAX * 0.25f);
+		speedY = -0.05f - (static_cast<float>(rand()) / RAND_MAX * 0.25f);
+		rotationSpeed = -2.0f + (static_cast<float>(rand()) / RAND_MAX * 4.0f);
+		
+	    hue[0] = 0.2f + static_cast<float>(rand()) / RAND_MAX * 0.2f;
+	    hue[1] = 0.2f + static_cast<float>(rand()) / RAND_MAX * 0.1f;
+	    hue[2] = 0.2f + static_cast<float>(rand()) / RAND_MAX * 0.2f;
     }
 }
 
@@ -63,7 +70,7 @@ void Planet::render() {
                 float px = (j - GRID_SIZE/2.0f) * pixelSize;
                 float py = (GRID_SIZE/2.0f - i) * pixelSize;
                 
-                glColor4f(hue[0], hue[1], hue[2], hue[3]);
+                glColor3f(hue[0], hue[1], hue[2]);
                 glVertex2f(px, py);
                 glVertex2f(px + pixelSize, py);
                 glVertex2f(px + pixelSize, py - pixelSize);

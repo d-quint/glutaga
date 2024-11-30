@@ -10,7 +10,7 @@ private:
     float speedY;
     float rotation;
     float rotationSpeed;
-    float hue[4];
+    float hue[3];
     
     static const int GRID_SIZE = 11;
 

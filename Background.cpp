@@ -8,7 +8,6 @@ Background::Background() {
         spawnStar();
     }
     
-    // Spawn fewer planets (around 3-5)
     for (int i = 0; i < 4; ++i) {
         spawnPlanet();
     }

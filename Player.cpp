@@ -395,8 +395,8 @@ float Player::getY() const { return y; }
 float Player::getSize() const { return playerSize; }
 
 void Player::shoot(std::vector<Projectile*>& projectiles) {
-    if (isRotating) {
-        return;  // Prevent shooting if the player is rotating
+    if (isRotating || isExploding) {  // Add isExploding check
+        return;  // Prevent shooting if the player is rotating or dying
     }
 
     for (int i = 0; i < projectiles.size(); i++) {

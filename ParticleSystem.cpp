@@ -53,8 +53,6 @@ void ParticleSystem::emit(float x, float y, float vx, float vy, float life, floa
 }
 
 void ParticleSystem::emitExplosion(float x, float y) {
-    std::cout << "Emitting explosion particles..." << std::endl;
-    
     // Create explosion particles in all directions
     for (int i = 0; i < 50; i++) {
         float startX = x + ((rand() % 100 - 50) / 1000.0f);
@@ -71,6 +69,4 @@ void ParticleSystem::emitExplosion(float x, float y) {
         
         particles.push_back(Particle(startX, startY, baseVX, baseVY, life, size, true));
     }
-    
-    std::cout << "Created " << particles.size() << " explosion particles" << std::endl;
 }

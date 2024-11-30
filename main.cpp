@@ -203,7 +203,7 @@ void initObjects() {
     
     ui = new UI(player);
     
-    // Set up death callback using function pointer
+    // Set up death callback
     player->setDeathCallback(onPlayerDeath);
 }
 
