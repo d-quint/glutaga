@@ -275,13 +275,13 @@ void Player::render() {
 
 void Player::checkBoundaryCollision() {
     // Right wall
-    if (x + playerSize > SCREEN_RIGHT) {
-        x = SCREEN_RIGHT - playerSize;
+    if (x + playerSize > SCREEN_RIGHT_GAMEPLAY) {
+        x = SCREEN_RIGHT_GAMEPLAY - playerSize;
         velocityX = -velocityX * BOUNCE_FACTOR;
     }
     // Left wall
-    if (x - playerSize < SCREEN_LEFT) {
-        x = SCREEN_LEFT + playerSize;
+    if (x - playerSize < SCREEN_LEFT_GAMEPLAY) {
+        x = SCREEN_LEFT_GAMEPLAY + playerSize;
         velocityX = -velocityX * BOUNCE_FACTOR;
     }
     // Top wall

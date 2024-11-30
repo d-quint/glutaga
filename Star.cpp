@@ -3,7 +3,8 @@
 #include "Star.h"
 
 Star::Star() {	
-    x = static_cast<float>(rand()) / RAND_MAX * 2.0f - 1.0f;
+    x = static_cast<float>(rand()) / RAND_MAX * 
+        (SCREEN_RIGHT_GAMEPLAY - SCREEN_LEFT_GAMEPLAY) + SCREEN_LEFT_GAMEPLAY;
     y = static_cast<float>(rand()) / RAND_MAX * 2.0f - 1.0f;
 
     // Base opacity between 0.3 to 0.5
@@ -56,11 +57,11 @@ void Star::update(float deltaTime) {
 
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-    // Reset position if off screen
+    // Reset position if off screen, using the full gameplay width
     if (y < -1.0f) {
         y = 1.0f;
-        x = static_cast<float>(rand()) / RAND_MAX * 2.0f - 1.0f;
-        // Keep the same baseAlpha and speed when resetting position
+        x = static_cast<float>(rand()) / RAND_MAX * 
+            (SCREEN_RIGHT_GAMEPLAY - SCREEN_LEFT_GAMEPLAY) + SCREEN_LEFT_GAMEPLAY;
     }
 }
 

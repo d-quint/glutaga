@@ -154,14 +154,46 @@ void initObjects() {
 	}
 }
 
-int main(int argc, char** argv) {
-    // Initialize OpenGL, GLEW, and GLUT
-    glutInit(&argc, argv); 
-    glutInitWindowSize(600, 600); 
-    glutCreateWindow("GLUTAGA");
-    //glutFullScreen();
+void reshapeWindow(int w, int h) {
+    windowWidth = w;
+    windowHeight = h;
+    
+    // Calculate aspect ratio
+    float aspectRatio = (float)w / (float)h;
+    GAME_ASPECT_RATIO = aspectRatio;
+    
+    // Update gameplay boundaries based on aspect ratio
+    SCREEN_LEFT_GAMEPLAY = SCREEN_LEFT * aspectRatio;
+    SCREEN_RIGHT_GAMEPLAY = SCREEN_RIGHT * aspectRatio;
+    
+    // Use full window as viewport
+    glViewport(0, 0, w, h);
+    
+    // Set up orthographic projection that maintains square proportions in the center
+    // but extends to fill the width
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(SCREEN_LEFT_GAMEPLAY, SCREEN_RIGHT_GAMEPLAY, SCREEN_BOTTOM, SCREEN_TOP, -1.0f, 1.0f);
+    glMatrixMode(GL_MODELVIEW);
+}
 
+int main(int argc, char** argv) {
+    glutInit(&argc, argv);
+    glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+    
+    // Get screen dimensions
+    int screenWidth = glutGet(GLUT_SCREEN_WIDTH);
+    int screenHeight = glutGet(GLUT_SCREEN_HEIGHT);
+    
+    glutCreateWindow("GLUTAGA");
+    glutFullScreen();
+    
+    windowWidth = screenWidth;
+    windowHeight = screenHeight;
+    reshapeWindow(screenWidth, screenHeight);
+    
     glutDisplayFunc(display);
+    glutReshapeFunc(reshapeWindow); 
     glutKeyboardFunc(keyboardDown);
     glutKeyboardUpFunc(keyboardUp);
     glutSpecialFunc(specialKeyDown);

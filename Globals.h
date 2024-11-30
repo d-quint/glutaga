@@ -35,4 +35,16 @@ extern bool specialKeyStates[256];
 extern bool mouseButtons[3];
 extern bool leftMouseWasPressed; 
 
+// For viewport tracking & aspect ratio
+extern int windowWidth;
+extern int windowHeight;
+extern float viewportX;
+extern float viewportY;
+extern float viewportWidth;
+extern float viewportHeight;
+
+extern float GAME_ASPECT_RATIO;
+extern float SCREEN_LEFT_GAMEPLAY;
+extern float SCREEN_RIGHT_GAMEPLAY;
+
 #endif // GLOBALS_H

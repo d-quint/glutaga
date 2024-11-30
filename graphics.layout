@@ -4,9 +4,9 @@ Order=0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,18,17,19
 [Editor_0]
 Open=1
 Top=1
-CursorCol=32
-CursorRow=160
-TopLine=142
+CursorCol=2
+CursorRow=122
+TopLine=115
 LeftChar=1
 [Editor_1]
 Open=1
@@ -27,7 +27,7 @@ Open=1
 Top=0
 CursorCol=1
 CursorRow=22
-TopLine=4
+TopLine=1
 LeftChar=1
 [Editor_4]
 Open=1
@@ -83,7 +83,7 @@ Open=1
 Top=0
 CursorCol=9
 CursorRow=167
-TopLine=155
+TopLine=144
 LeftChar=1
 [Editor_12]
 Open=1
@@ -116,9 +116,9 @@ LeftChar=1
 [Editor_16]
 Open=1
 Top=0
-CursorCol=36
+CursorCol=1
 CursorRow=14
-TopLine=36
+TopLine=1
 LeftChar=1
 [Editor_17]
 Open=1
@@ -132,7 +132,7 @@ Open=1
 Top=0
 CursorCol=40
 CursorRow=20
-TopLine=7
+TopLine=1
 LeftChar=1
 [Editor_19]
 Open=1

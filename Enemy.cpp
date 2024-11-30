@@ -107,10 +107,11 @@ void Enemy::updateVertices() {
 }
 
 void Enemy::spawn() {
-    x = static_cast<float>(rand()) / RAND_MAX * (SCREEN_RIGHT - SCREEN_LEFT) + SCREEN_LEFT;
-    y = SCREEN_TOP + size; // Start just above the top of the screen
+    x = static_cast<float>(rand()) / RAND_MAX * 
+        (SCREEN_RIGHT_GAMEPLAY - SCREEN_LEFT_GAMEPLAY) + SCREEN_LEFT_GAMEPLAY;
+    y = SCREEN_TOP + size;
     active = true;
-    updateVertices(); // Update vertex positions after spawning
+    updateVertices();
 }
 
 void Enemy::shoot(std::vector<Projectile*>& projectileList) {
