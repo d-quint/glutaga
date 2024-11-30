@@ -60,3 +60,6 @@ Thumbs.db
 
 # Highscore file
 highscore.dat
+
+# Devcpp .layout file
+*.layout
