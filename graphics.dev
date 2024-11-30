@@ -29,7 +29,7 @@ IncludeVersionInfo=0
 SupportXPThemes=0
 CompilerSet=0
 CompilerSettings=0000000000000000000000000
-UnitCount=22
+UnitCount=24
 
 [VersionInfo]
 Major=1
@@ -241,7 +241,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit23]
-FileName=Background.cpp
+FileName=Planet.cpp
 CompileCpp=1
 Folder=graphics
 Compile=1
@@ -251,7 +251,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit24]
-FileName=Background.h
+FileName=Planet.h
 CompileCpp=1
 Folder=graphics
 Compile=1

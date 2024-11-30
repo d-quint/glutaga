@@ -4,18 +4,15 @@
 #include "Globals.h"
 
 #include "Star.h"
-// #include "Planet.h"
+#include "Planet.h"
 
 class Background {
 private:
     std::vector<Star> stars;
-    // std::vector<Planet> planets;
-    GLuint vboGradientVertices;
-    GLuint vboGradientColors;
+    std::vector<Planet> planets;
 
     void spawnStar();
-    // void spawnPlanet();
-    void initGradient();
+    void spawnPlanet();
 
 public:
     Background();

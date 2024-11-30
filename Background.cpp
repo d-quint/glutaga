@@ -7,19 +7,35 @@ Background::Background() {
     for (int i = 0; i < 100; ++i) {
         spawnStar();
     }
+    
+    // Spawn fewer planets (around 3-5)
+    for (int i = 0; i < 4; ++i) {
+        spawnPlanet();
+    }
 }
 
 Background::~Background() {
-    // Remove VBO deletion
+    stars.clear();
+    planets.clear();
 }
 
 void Background::spawnStar() {
     stars.push_back(Star());
 }
 
+void Background::spawnPlanet() {
+    planets.push_back(Planet());
+}
+
 void Background::update(float deltaTime) {
+    // Update stars
     for (int i = 0; i < stars.size(); ++i) {
         stars[i].update(deltaTime);
+    }
+    
+    // Update planets
+    for (int i = 0; i < planets.size(); ++i) {
+        planets[i].update(deltaTime);
     }
 }
 
@@ -45,7 +61,12 @@ void Background::render() {
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    // Render stars and planets
+    // Render planets first (behind stars)
+    for (int i = 0; i < planets.size(); ++i) {
+        planets[i].render();
+    }
+    
+    // Then render stars
     for (int i = 0; i < stars.size(); ++i) {
         stars[i].render();
     }
