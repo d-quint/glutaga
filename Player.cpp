@@ -386,3 +386,23 @@ void Player::shoot(std::vector<Projectile*>& projectiles) {
         }
     }
 }
+
+bool Player::checkCollision(float projectileX, float projectileY, float projectileWidth, float projectileHeight) {
+    // Calculate player's bounding box
+    float playerLeft = x - playerSize;
+    float playerRight = x + playerSize;
+    float playerTop = y + playerSize;
+    float playerBottom = y - playerSize;
+
+    // Calculate projectile's bounding box
+    float projectileLeft = projectileX - projectileWidth/2;
+    float projectileRight = projectileX + projectileWidth/2;
+    float projectileTop = projectileY + projectileHeight/2;
+    float projectileBottom = projectileY - projectileHeight/2;
+
+    // Check for overlap
+    bool collisionX = playerRight > projectileLeft && playerLeft < projectileRight;
+    bool collisionY = playerTop > projectileBottom && playerBottom < projectileTop;
+
+    return collisionX && collisionY;
+}

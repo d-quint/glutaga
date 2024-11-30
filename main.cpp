@@ -6,12 +6,14 @@
 #include "Enemy.h"
 #include "Input.h"
 #include "Background.h"
+#include "UI.h"
 
 Player* player;
 Background* background;
 std::vector<Projectile*> projectiles;
 std::vector<Projectile*> enemyProjectiles;
 std::vector<Enemy*> enemies;
+UI* ui;
 
 void display() { 
     glClear(GL_COLOR_BUFFER_BIT);
@@ -34,7 +36,10 @@ void display() {
 	}
 	
 	player->render();
-
+    
+    // Render UI elements last (on top of everything)
+    ui->render();
+    
     glFlush();
 }
 
@@ -98,6 +103,19 @@ void updateProjectiles() {
             }
         }
     }
+
+    // Check enemy projectile collisions with player
+    for (int i = 0; i < enemyProjectiles.size(); i++) {
+        if (enemyProjectiles[i]->isActive() && 
+            player->checkCollision(
+                enemyProjectiles[i]->getX(), 
+                enemyProjectiles[i]->getY(), 
+                PROJECTILE_WIDTH, 
+                PROJECTILE_HEIGHT)) {
+            enemyProjectiles[i]->deactivate();
+            ui->damage(10.0f);
+        }
+    }
 }
 
 void updateSpawnEnemies() {
@@ -137,8 +155,11 @@ void updateEnemies() {
 
 void update(int value) {
     processInput();
-	
+    
     player->update();
+    
+    // Update UI position to follow player
+    ui->setPosition(player->getX(), player->getY());
 
     updateProjectiles();
     updateSpawnEnemies();
@@ -146,6 +167,7 @@ void update(int value) {
     updateEnemies();
 
     background->update(0.016f);
+    ui->update(0.016f);
 
     glutPostRedisplay();
     glutTimerFunc(16, update, 0);
@@ -170,6 +192,8 @@ void initObjects() {
     for (int i = 0; i < MAX_ENEMIES; i++) { 
 	    enemies.push_back(new Enemy());
 	}
+    
+    ui = new UI(100.0f);  // Initialize with 100 HP
 }
 
 void reshapeWindow(int w, int h) {
@@ -216,6 +240,8 @@ void cleanup() {
         delete enemies[i];
     }
     enemies.clear();
+    
+    delete ui;
 }
 
 int main(int argc, char** argv) {

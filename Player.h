@@ -56,6 +56,7 @@ class Player {
     float getSize() const;           // Get the size of the player
 
     void shoot(std::vector<Projectile*>& projectiles);
+    bool checkCollision(float projectileX, float projectileY, float projectileWidth, float projectileHeight);
 };
 
 #endif // PLAYER_H
