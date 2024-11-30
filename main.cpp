@@ -177,6 +177,29 @@ void reshapeWindow(int w, int h) {
     glMatrixMode(GL_MODELVIEW);
 }
 
+void cleanup() {
+    // Clean up allocated objects
+    delete player;
+    delete background;
+    
+    // Clean up projectiles
+    for (int i = 0; i < projectiles.size(); i++) {
+        delete projectiles[i];
+    }
+    projectiles.clear();
+    
+    for (int i = 0; i < enemyProjectiles.size(); i++) {
+        delete enemyProjectiles[i];
+    }
+    enemyProjectiles.clear();
+    
+    // Clean up enemies
+    for (int i = 0; i < enemies.size(); i++) {
+        delete enemies[i];
+    }
+    enemies.clear();
+}
+
 int main(int argc, char** argv) {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
@@ -203,6 +226,7 @@ int main(int argc, char** argv) {
 
     glewInit();
     initObjects();
+    atexit(cleanup);
     glutMainLoop();
 
     return 0;
