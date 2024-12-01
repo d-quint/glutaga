@@ -43,7 +43,6 @@ class Enemy {
     bool isActive() const;
     bool checkCollision(float projectileX, float projectileY, float projectileWidth, float projectileHeight);
 
-    // New method to set size
     void setSize(float newSize);
     float getSize() const { return size; }
 
