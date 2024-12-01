@@ -3,6 +3,7 @@
 
 #include "Globals.h"
 #include "Player.h"
+#include "GameOver.h"
 
 class UI {
   private:
@@ -21,6 +22,9 @@ class UI {
     
     int highScore;
     
+    GameOver* gameOver;
+    bool isGameOver;
+    
     void loadHighScore();
 
   public:
@@ -34,8 +38,14 @@ class UI {
           y(0.0f),
           currentScore(0),
           scoreAnimTime(0.0f),
-          highScore(0) {
+          highScore(0),
+          gameOver(new GameOver()),
+          isGameOver(false) {
         loadHighScore();
+    }
+    
+    ~UI() {
+        delete gameOver;
     }
     
     void render();
@@ -43,11 +53,13 @@ class UI {
     void setHealth(float health);
     void setPosition(float newX, float newY);
     float getHealth() const { return playerHealth; }
+    bool getIsGameOver() const { return isGameOver; }
     void damage(float amount);
     void heal(float amount);
     void addScore(int amount);
     int getScore() const { return currentScore; }
     void saveHighScore();
+    void restart();
 };
 
 #endif // UI_H 

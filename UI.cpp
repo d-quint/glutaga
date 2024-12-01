@@ -1,9 +1,16 @@
 #include "UI.h"
+#include <iostream>
 
 const char* HIGH_SCORE_FILE = "highscore.dat";
 
 void UI::render() {
-	// Calculate score position with sine wave motion
+    // Render game over screen on top of everything
+    if (isGameOver) {
+        gameOver->render();
+    }
+    
+    // Always render the rest of the UI
+    // Calculate score position with sine wave motion
     float scoreY = SCREEN_TOP - 0.1f + 
                   SCORE_BOB_AMOUNT * sin(scoreAnimTime * SCORE_BOB_SPEED);
     
@@ -107,17 +114,25 @@ void UI::render() {
     glDisable(GL_BLEND);
 }
 
-void UI::update(float deltaTime) {
+void UI::update(float deltaTime) {       
     // Smoothly animate the displayed health towards the actual health
     float diff = playerHealth - displayedHealth;
+    
     if (abs(diff) > 0.1f) {
         displayedHealth += diff * animationSpeed * deltaTime;
     } else {
         displayedHealth = playerHealth;
     }
 
-    // Update score animation time
     scoreAnimTime += deltaTime;
+
+    if (isGameOver) {
+        if (gameOver) {
+            gameOver->update(deltaTime);
+        } else {
+            std::cerr << "ERROR: gameOver pointer is null!" << std::endl;
+        }
+    }
 }
 
 void UI::setHealth(float health) {
@@ -128,6 +143,8 @@ void UI::damage(float amount) {
     setHealth(playerHealth - amount);
     player->takeDamage();
     if (playerHealth <= 0) {
+        isGameOver = true;
+        gameOver->setScores(currentScore, highScore);
         player->startDeathSequence();
     }
 }
@@ -164,5 +181,22 @@ void UI::saveHighScore() {
     if (file.is_open()) {
         file.write(reinterpret_cast<const char*>(&highScore), sizeof(highScore));
         file.close();
+    }
+}
+
+void UI::restart() {
+    if (isGameOver) {
+        // Reset score
+        currentScore = 0;
+        
+        // Reset player
+        player->reset();
+        
+        // Reset game over state
+        isGameOver = false;
+        
+        // Reset health
+        playerHealth = maxPlayerHealth;
+        displayedHealth = maxPlayerHealth;
     }
 }

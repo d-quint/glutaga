@@ -29,20 +29,20 @@ void display() {
     background->render();
     
     // Render all active projectiles
-	for (int i = 0; i < projectiles.size(); i++) {
-	    projectiles[i]->render();
-	}
+    for (int i = 0; i < projectiles.size(); i++) {
+        projectiles[i]->render();
+    }
+    
+    for (int i = 0; i < enemyProjectiles.size(); i++) {
+        enemyProjectiles[i]->render();
+    }
+    
+    // Render all active enemies
+    for (int i = 0; i < enemies.size(); i++) {
+        enemies[i]->render();
+    }
 	
-	for (int i = 0; i < enemyProjectiles.size(); i++) {
-	    enemyProjectiles[i]->render();
-	}
-	
-	// Render all active enemies
-	for (int i = 0; i < enemies.size(); i++) {
-	    enemies[i]->render();
-	}
-	
-	player->render();
+	  player->render();
     
     // Render UI elements last (on top of everything)
     ui->render();
@@ -61,13 +61,13 @@ void processInput() {
     if (specialKeyStates[GLUT_KEY_DOWN] || keyStates['s'])
         player->moveDown();
         
-	// Handle shooting
-	if (mouseButtons[GLUT_LEFT_BUTTON] && !leftMouseWasPressed) {
-	    player->shoot(projectiles);
-	    leftMouseWasPressed = true;
-	} else if (!mouseButtons[GLUT_LEFT_BUTTON]) {
-	    leftMouseWasPressed = false;
-	}
+    // Handle shooting
+    if (mouseButtons[GLUT_LEFT_BUTTON] && !leftMouseWasPressed) {
+        player->shoot(projectiles);
+        leftMouseWasPressed = true;
+    } else if (!mouseButtons[GLUT_LEFT_BUTTON]) {
+        leftMouseWasPressed = false;
+    }
 }
 
 void mouseWheel(int wheel, int direction, int x, int y)
@@ -142,17 +142,17 @@ void updateSpawnEnemies() {
 }
 
 void updateShootEnemies() {
-	static float shootTimer = 0.0f;
-	shootTimer += 0.016f; // 60 fps
-	
-	if (shootTimer > 1.0f) { // Shoot every 1 second
-	    for (int i = 0; i < enemies.size(); i++) {
-	        if (enemies[i]->isActive()) {
-	            enemies[i]->shoot(enemyProjectiles);
-	        }
-	    }
-	    shootTimer = 0.0f;
-	}
+    static float shootTimer = 0.0f;
+    shootTimer += 0.016f; // 60 fps
+    
+    if (shootTimer > 1.0f) { // Shoot every 1 second
+        for (int i = 0; i < enemies.size(); i++) {
+            if (enemies[i]->isActive()) {
+                enemies[i]->shoot(enemyProjectiles);
+            }
+        }
+        shootTimer = 0.0f;
+    }
 }
 
 void updateEnemies() {
@@ -162,21 +162,25 @@ void updateEnemies() {
 }
 
 void update(int value) {
-    processInput();
-    
-    player->update();
-    
-    // Update UI position to follow player
-    ui->setPosition(player->getX(), player->getY());
+    if (!player->isPlayerDead()) {
+        processInput();
+        player->update();
+        
+        // Update UI position to follow player
+        ui->setPosition(player->getX(), player->getY());
 
-    updateProjectiles();
-    updateSpawnEnemies();
-    updateShootEnemies();
-    updateEnemies();
+        updateProjectiles();
+        updateSpawnEnemies();
+        updateShootEnemies();
+        updateEnemies();
 
-    background->update(0.016f);
+        background->update(0.016f);
+    } else {
+        player->update();  // Still update player for death animation
+    }
+    
     ui->update(0.016f);
-
+    
     glutPostRedisplay();
     glutTimerFunc(16, update, 0);
 }
@@ -259,6 +263,8 @@ void cleanup() {
 }
 
 int main(int argc, char** argv) {
+    std::cout << "Starting program..." << std::endl;
+
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     
@@ -283,8 +289,16 @@ int main(int argc, char** argv) {
     glutMouseWheelFunc(mouseWheel);
     glutTimerFunc(0, update, 0);
 
+    std::cout << "GLUT initialized" << std::endl;
+
+    std::cout << "About to initialize GLEW..." << std::endl;
     glewInit();
+    std::cout << "GLEW initialized" << std::endl;
+
+    std::cout << "About to initialize objects..." << std::endl;
     initObjects();
+    std::cout << "Objects initialized" << std::endl;
+
     atexit(cleanup);
     glutMainLoop();
 

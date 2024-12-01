@@ -72,6 +72,10 @@ public:
     void setDeathCallback(void (*callback)()) {
         deathCallback = callback;
     }
+
+    bool isPlayerDead() const { return isDead; }
+
+    void reset();
 };
 
 #endif // PLAYER_H

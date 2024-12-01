@@ -4,8 +4,8 @@
 CPP      = g++.exe
 CC       = gcc.exe
 WINDRES  = windres.exe
-OBJ      = main.o glew.o Globals.o Input.o Player.o Projectile.o Enemy.o ParticleSystem.o Particle.o Star.o Background.o UI.o Planet.o $(RES)
-LINKOBJ  = main.o glew.o Globals.o Input.o Player.o Projectile.o Enemy.o ParticleSystem.o Particle.o Star.o Background.o UI.o Planet.o $(RES)
+OBJ      = main.o glew.o Globals.o Input.o Player.o Projectile.o Enemy.o ParticleSystem.o Particle.o Star.o Background.o UI.o Planet.o GameOver.o $(RES)
+LINKOBJ  = main.o glew.o Globals.o Input.o Player.o Projectile.o Enemy.o ParticleSystem.o Particle.o Star.o Background.o UI.o Planet.o GameOver.o $(RES)
 LIBS     = -L"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/lib" -static-libgcc -std=c++14 -L"C:/freeglut/lib/x64" -L"C:/glew-2.1.0/lib" -lfreeglut -lopengl32 -lglu32 
 INCS     = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/freeglut/include/GL" -I"C:/freeglut/include" -I"C:/glew-2.1.0/include"
 CXXINCS  = -I"C:/Program Files (x86)/Dev-Cpp/MinGW64/x86_64-w64-mingw32/include" -I"C:/freeglut/include/GL" -I"C:/freeglut/include" -I"C:/glew-2.1.0/include"
@@ -63,3 +63,6 @@ UI.o: UI.cpp
 
 Planet.o: Planet.cpp
 	$(CPP) -c Planet.cpp -o Planet.o $(CXXFLAGS)
+
+GameOver.o: GameOver.cpp
+	$(CPP) -c GameOver.cpp -o GameOver.o $(CXXFLAGS)

@@ -308,7 +308,6 @@ void Player::update() {
         
         if (deathTimer <= 0) {
             isDead = true;
-            exit(0);  // Exit the game
         }
         return;
     }
@@ -461,4 +460,26 @@ void Player::takeDamage() {
             particleSystem.emit(x + vx*0.1f, y + vy*0.1f, vx, vy, life, size, true);
         }
     }
+}
+
+void Player::reset() {
+    // Reset position
+    x = 0.0f;
+    y = -0.5f;
+    
+    // Reset velocities
+    velocityX = 0.0f;
+    velocityY = 0.0f;
+    
+    // Reset states
+    isRotating = false;
+    rotationAngle = 0.0f;
+    isDead = false;
+    isExploding = false;
+    deathTimer = 0.0f;
+    
+    // Reset head color
+    currentHeadColor[0] = 0.8f;
+    currentHeadColor[1] = 0.3f;
+    currentHeadColor[2] = 0.1f;
 }
