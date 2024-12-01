@@ -45,7 +45,7 @@ The GLUTAGA starfighter, powered by revolutionary OpenGL technology, represents 
    - Click the "Project" tab
    - Select "Project Options"
    - Go to "Parameters" tab
-   - Under "Linker", ensure the following paths are correct:
+   - Under "Linker", ensure the following parameters are correct:
      - -lfreeglut
      - -lopengl32
      - -lglu32
