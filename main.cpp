@@ -52,13 +52,13 @@ void display() {
 
 void processInput() {
     // Check arrow keys and WASD keys
-    if (specialKeyStates[GLUT_KEY_LEFT] || keyStates['a'])
+    if (specialKeyStates[GLUT_KEY_LEFT] || keyStates['a'] || keyStates['A'])
         player->moveLeft();
-    if (specialKeyStates[GLUT_KEY_RIGHT] || keyStates['d'])
+    if (specialKeyStates[GLUT_KEY_RIGHT] || keyStates['d'] || keyStates['D'])
         player->moveRight();
-    if (specialKeyStates[GLUT_KEY_UP] || keyStates['w'])
+    if (specialKeyStates[GLUT_KEY_UP] || keyStates['w'] || keyStates['W'])
         player->moveUp();
-    if (specialKeyStates[GLUT_KEY_DOWN] || keyStates['s'])
+    if (specialKeyStates[GLUT_KEY_DOWN] || keyStates['s'] || keyStates['S'])
         player->moveDown();
         
     // Handle shooting
@@ -75,7 +75,7 @@ void processInput() {
     }
 
     // Restart with R
-    if (keyStates['r']) {
+    if (keyStates['r'] || keyStates['R']) {
         ui->restart();
     }
 }
