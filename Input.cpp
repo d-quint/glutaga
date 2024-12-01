@@ -3,11 +3,6 @@
 
 void keyboardDown(unsigned char key, int x, int y) {
     keyStates[key] = true;
-    
-    // Check for ESC key (ASCII value 27)
-    if (key == 27) {
-        glutLeaveMainLoop();  
-    }
 }
 
 void keyboardUp(unsigned char key, int x, int y) {

@@ -39,6 +39,7 @@ public:
     void render();
     void update(float deltaTime);
     void setScores(int score, int high);
+    void reset();
 };
 
 #endif // GAMEOVER_H

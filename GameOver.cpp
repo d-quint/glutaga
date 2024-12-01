@@ -113,7 +113,7 @@ void GameOver::renderPixelLetter(const bool letter[8][8], float offsetX, float b
 }
 
 void GameOver::renderCenteredText(const char* text, float y) {
-    float charWidth = 0.0222f;
+    float charWidth = 0.0235f;
     float textWidth = strlen(text) * charWidth;
     float x = (SCREEN_LEFT + SCREEN_RIGHT - textWidth) / 2.0f;
     
@@ -200,4 +200,9 @@ void GameOver::update(float deltaTime) {
 void GameOver::setScores(int score, int high) {
     currentScore = score;
     highScore = high;
+}
+
+void GameOver::reset() {
+    fadeAlpha = 0.0f;  // Reset fade alpha
+    animTime = 0.0f;   // Reset animation time
 } 

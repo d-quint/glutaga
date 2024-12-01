@@ -194,6 +194,7 @@ void UI::restart() {
         
         // Reset game over state
         isGameOver = false;
+        gameOver->reset();  // Add this line
         
         // Reset health
         playerHealth = maxPlayerHealth;

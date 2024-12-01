@@ -68,6 +68,16 @@ void processInput() {
     } else if (!mouseButtons[GLUT_LEFT_BUTTON]) {
         leftMouseWasPressed = false;
     }
+
+    // Exit with ESC
+    if (keyStates[27]) {
+        glutLeaveMainLoop();
+    }
+
+    // Restart with R
+    if (keyStates['r']) {
+        ui->restart();
+    }
 }
 
 void mouseWheel(int wheel, int direction, int x, int y)
@@ -162,19 +172,19 @@ void updateEnemies() {
 }
 
 void update(int value) {
+    processInput();
+    
+    background->update(0.016f);
+    updateProjectiles();
+    updateSpawnEnemies();
+    updateShootEnemies();
+    updateEnemies();
+    
     if (!player->isPlayerDead()) {
-        processInput();
         player->update();
         
         // Update UI position to follow player
         ui->setPosition(player->getX(), player->getY());
-
-        updateProjectiles();
-        updateSpawnEnemies();
-        updateShootEnemies();
-        updateEnemies();
-
-        background->update(0.016f);
     } else {
         player->update();  // Still update player for death animation
     }
@@ -263,8 +273,6 @@ void cleanup() {
 }
 
 int main(int argc, char** argv) {
-    std::cout << "Starting program..." << std::endl;
-
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
     
@@ -289,16 +297,8 @@ int main(int argc, char** argv) {
     glutMouseWheelFunc(mouseWheel);
     glutTimerFunc(0, update, 0);
 
-    std::cout << "GLUT initialized" << std::endl;
-
-    std::cout << "About to initialize GLEW..." << std::endl;
     glewInit();
-    std::cout << "GLEW initialized" << std::endl;
-
-    std::cout << "About to initialize objects..." << std::endl;
     initObjects();
-    std::cout << "Objects initialized" << std::endl;
-
     atexit(cleanup);
     glutMainLoop();
 
